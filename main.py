@@ -32,7 +32,13 @@ def health():
     return {
         "status": "healthy"
     }
-
+@app.get("/info")
+def info():
+    return {
+        "project": "Smart URL Shortener",
+        "version": "1.0",
+        "technology": "FastAPI"
+    }
 
 @app.post("/shorten")
 def shorten_url(request: URLRequest):
