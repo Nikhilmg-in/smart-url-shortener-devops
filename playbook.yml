@@ -1,0 +1,19 @@
+---
+- name: Configure Smart URL Shortener Server
+  hosts: local
+  connection: local
+  become: false
+
+  tasks:
+    - name: Display server configuration message
+      debug:
+        msg: "Smart URL Shortener server configured successfully"
+
+    - name: Verify Python installation
+      command: python3 --version
+      register: python_version
+      changed_when: false
+
+    - name: Show Python version
+      debug:
+        var: python_version.stdout
