@@ -29,9 +29,10 @@
     creates: "{{ app_dir }}/venv/bin/python"
 
 - name: Install application requirements
-  ansible.builtin.pip:
-    requirements: "{{ app_dir }}/requirements.txt"
-    virtualenv: "{{ app_dir }}/venv"
+  ansible.builtin.command:
+    cmd: "{{ app_dir }}/venv/bin/pip install -r {{ app_dir }}/requirements.txt"
+  register: pip_result
+  changed_when: "'Successfully installed' in pip_result.stdout"
   notify: Restart url shortener
 
 - name: Deploy start/restart script

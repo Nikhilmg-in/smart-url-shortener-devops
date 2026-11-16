@@ -1,5 +1,5 @@
 ---
 # defaults file for urlshortener
-app_dir: "{{ ansible_env.HOME }}/smart-url-shortener"
+app_dir: "{{ lookup('env', 'HOME') }}/smart-url-shortener"
 app_port: 8081
 app_env: development
