@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smart-url-shortener
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: smart-url-shortener
+  template:
+    metadata:
+      labels:
+        app: smart-url-shortener
+    spec:
+      containers:
+        - name: smart-url-shortener
+          image: smart-url-shortener:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
