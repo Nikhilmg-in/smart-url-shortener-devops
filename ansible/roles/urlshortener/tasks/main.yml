@@ -1,0 +1,61 @@
+---
+# tasks file for urlshortener
+- name: Verify Python installation
+  ansible.builtin.command: python3 --version
+  register: python_version
+  changed_when: false
+
+- name: Show Python version
+  ansible.builtin.debug:
+    var: python_version.stdout
+
+- name: Ensure application directory exists
+  ansible.builtin.file:
+    path: "{{ app_dir }}"
+    state: directory
+    mode: "0755"
+
+- name: Copy application source files
+  ansible.builtin.copy:
+    src: "{{ playbook_dir }}/../{{ item }}"
+    dest: "{{ app_dir }}/{{ item }}"
+    mode: "0644"
+  loop: "{{ app_files }}"
+  notify: Restart url shortener
+
+- name: Create Python virtual environment
+  ansible.builtin.command:
+    cmd: "python3 -m venv {{ app_dir }}/venv"
+    creates: "{{ app_dir }}/venv/bin/python"
+
+- name: Install application requirements
+  ansible.builtin.pip:
+    requirements: "{{ app_dir }}/requirements.txt"
+    virtualenv: "{{ app_dir }}/venv"
+  notify: Restart url shortener
+
+- name: Deploy start/restart script
+  ansible.builtin.template:
+    src: restart.sh.j2
+    dest: "{{ app_dir }}/restart.sh"
+    mode: "0755"
+  notify: Restart url shortener
+
+- name: Run pending handlers now (start the app)
+  ansible.builtin.meta: flush_handlers
+
+- name: Wait for the application port
+  ansible.builtin.wait_for:
+    host: 127.0.0.1
+    port: "{{ app_port }}"
+    timeout: 30
+
+- name: Check application health endpoint
+  ansible.builtin.uri:
+    url: "http://127.0.0.1:{{ app_port }}/health"
+    return_content: true
+  register: health
+
+- name: Show health response
+  ansible.builtin.debug:
+    var: health.json

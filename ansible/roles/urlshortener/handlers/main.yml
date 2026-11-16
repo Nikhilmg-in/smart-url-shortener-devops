@@ -1,0 +1,4 @@
+---
+# handlers file for urlshortener
+- name: Restart url shortener
+  ansible.builtin.shell: "{{ app_dir }}/restart.sh"

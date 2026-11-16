@@ -1,0 +1,12 @@
+---
+- name: Configure Smart URL Shortener Server
+  hosts: local
+  become: false
+
+  # Variables (override role defaults)
+  vars:
+    app_port: 8081
+    app_env: ansible
+
+  roles:
+    - urlshortener

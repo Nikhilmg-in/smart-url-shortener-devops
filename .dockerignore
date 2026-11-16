@@ -1,0 +1,11 @@
+.git
+.venv
+__pycache__
+*.pyc
+dist
+build
+*.egg-info
+tests
+ansible
+k8s
+Jenkinsfile
