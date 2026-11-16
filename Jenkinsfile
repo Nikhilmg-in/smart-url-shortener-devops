@@ -10,6 +10,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'smart-url-shortener'
         VENV       = '.venv'
+        PATH       = "/opt/homebrew/bin:/usr/local/bin:/Applications/Docker.app/Contents/Resources/bin:${env.PATH}"
     }
 
     stages {
