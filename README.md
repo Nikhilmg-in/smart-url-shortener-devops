@@ -104,3 +104,4 @@ kubectl get pods
 Storage is in memory and each pod has its own copy, so show `/health` and `/info`
 through the Service. For the redirect demo use `kubectl port-forward pod/<name> 8000:8000`.
 CI pipeline added
+# trigger test
